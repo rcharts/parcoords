@@ -1,0 +1,79 @@
+---
+title: rCharts
+subtitle: Interactive JS Charts from R
+author: Ramnath Vaidyanathan
+github: {user: ramnathv, repo: rChartsParCoords, branch: "gh-pages"}
+framework: minimal
+mode: selfcontained
+widgets: [parcoords]
+highlighter: highlight.js
+hitheme: solarized_dark
+background: images/light_wool.png
+assets:
+  css: 
+    - "http://fonts.googleapis.com/css?family=Open+Sans"
+    - "http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700"
+---
+
+```{r echo = F, message = F, cache = F}
+opts_chunk$set(results = 'asis', comment = NA, message = F, tidy = F)
+require(rCharts)
+options(RCHART_WIDTH = 850, RCHART_HEIGHT = 400)
+```
+
+## Parallel Coordinates Plot
+
+This post illustrates how to get Parallel Coordinates charts using rCharts and Slidify. The code here is courtesy [nachocab](https://github.com/nachocab/clickme/tree/master/inst/examples/par_coords). I have just done some minor refactoring.
+
+
+```{r setupfunctions}
+cars <- read.csv('data/cars.csv')
+p1 <- rCharts$new()
+p1$field('lib', 'parcoords')
+p1$set(padding = list(top = 24, left = 0, bottom = 12, right = 200))
+p1$set(data = toJSONArray(cars, json = F), 
+  colorby = 'economy', 
+  range = range(cars$economy),
+  colors = c('steelblue', 'brown')
+)
+p1$print('chart')
+```
+
+Let us now modify the colorby variable and the actual colors.
+
+```{r}
+p1$set(
+  colorby = 'power', 
+  range = range(cars$power, na.rm = T),
+  colors = c('yellow', 'red')
+)
+p1$print('chart2')
+```
+
+Another example from `clickme` wiki.
+
+```{r}
+country_stats <- data.frame(
+  country = paste("country ", 1:25), 
+  ice_cream_production = rnorm(25), 
+  flamenco_appreciation_rate = rnorm(25,mean = -1, sd = 4), 
+  beatles_records_sold = rnorm(25, mean = 2)
+)
+p2 <- rCharts$new()
+p2$field('lib', 'parcoords')
+p2$set(padding = list(top = 24, left = 0, bottom = 12, right = 200))
+p2$set(
+  data = toJSONArray(country_stats, json = F),
+  colorby = 'flamenco_appreciation_rate',
+  range = range(country_stats$flamenco_appreciation_rate),
+  colors = c('green', 'purple')
+)
+p2$print('chart3')
+```
+
+
+
+
+
+
+
